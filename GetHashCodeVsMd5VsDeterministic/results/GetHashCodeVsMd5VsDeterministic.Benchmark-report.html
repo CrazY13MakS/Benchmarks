@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+<meta charset='utf-8' />
+<title>GetHashCodeVsMd5VsDeterministic.Benchmark-20210212-012753</title>
+
+<style type="text/css">
+	table { border-collapse: collapse; display: block; width: 100%; overflow: auto; }
+	td, th { padding: 6px 13px; border: 1px solid #ddd; text-align: right; }
+	tr { background-color: #fff; border-top: 1px solid #ccc; }
+	tr:nth-child(even) { background: #f8f8f8; }
+</style>
+</head>
+<body>
+<pre><code>
+BenchmarkDotNet=v0.12.1, OS=Windows 10.0.17763.1697 (1809/October2018Update/Redstone5)
+AMD Ryzen 9 3900X, 1 CPU, 24 logical and 12 physical cores
+.NET Core SDK=5.0.102
+  [Host]      : .NET Core 3.1.11 (CoreCLR 4.700.20.56602, CoreFX 4.700.20.56604), X64 RyuJIT
+  ServerForce : .NET Core 3.1.11 (CoreCLR 4.700.20.56602, CoreFX 4.700.20.56604), X64 RyuJIT
+  RyuJitX64   : .NET Core 3.1.11 (CoreCLR 4.700.20.56602, CoreFX 4.700.20.56604), X64 RyuJIT
+  Server      : .NET Core 3.1.11 (CoreCLR 4.700.20.56602, CoreFX 4.700.20.56604), X64 RyuJIT
+</code></pre>
+<pre><code>Jit=RyuJit  Platform=X64  
+</code></pre>
+
+<table>
+<thead><tr><th>       Method</th><th>  Job</th><th>Force</th><th>Server</th><th>IterationCount</th><th>LaunchCount</th><th>WarmupCount</th><th>Mean</th><th>Error</th><th>StdDev</th><th>Median</th><th>Gen 0</th><th>Gen 1</th><th>Gen 2</th><th>Allocated</th>
+</tr>
+</thead><tbody><tr><td>DeterministicArray</td><td>ServerForce</td><td>True</td><td>True</td><td>15</td><td>2</td><td>10</td><td>13.97 ms</td><td>0.035 ms</td><td>0.051 ms</td><td>13.96 ms</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>DeterministicStatic</td><td>RyuJitX64</td><td>True</td><td>False</td><td>Default</td><td>Default</td><td>Default</td><td>14.55 ms</td><td>0.017 ms</td><td>0.015 ms</td><td>14.55 ms</td><td>-</td><td>-</td><td>-</td><td>2 B</td>
+</tr><tr><td>DeterministicStatic</td><td>ServerForce</td><td>True</td><td>True</td><td>15</td><td>2</td><td>10</td><td>15.77 ms</td><td>0.038 ms</td><td>0.056 ms</td><td>15.74 ms</td><td>-</td><td>-</td><td>-</td><td>387 B</td>
+</tr><tr><td>DeterministicArray</td><td>RyuJitX64</td><td>True</td><td>False</td><td>Default</td><td>Default</td><td>Default</td><td>15.84 ms</td><td>0.118 ms</td><td>0.105 ms</td><td>15.83 ms</td><td>-</td><td>-</td><td>-</td><td>18 B</td>
+</tr><tr><td>DeterministicStatic</td><td>Server</td><td>False</td><td>True</td><td>15</td><td>2</td><td>10</td><td>16.48 ms</td><td>0.056 ms</td><td>0.082 ms</td><td>16.46 ms</td><td>-</td><td>-</td><td>-</td><td>394 B</td>
+</tr><tr><td>NativeStatic</td><td>ServerForce</td><td>True</td><td>True</td><td>15</td><td>2</td><td>10</td><td>16.70 ms</td><td>0.032 ms</td><td>0.047 ms</td><td>16.70 ms</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>NativeArray</td><td>ServerForce</td><td>True</td><td>True</td><td>15</td><td>2</td><td>10</td><td>17.07 ms</td><td>0.043 ms</td><td>0.063 ms</td><td>17.07 ms</td><td>-</td><td>-</td><td>-</td><td>-</td>
+</tr><tr><td>NativeStatic</td><td>Server</td><td>False</td><td>True</td><td>15</td><td>2</td><td>10</td><td>17.46 ms</td><td>0.022 ms</td><td>0.034 ms</td><td>17.46 ms</td><td>-</td><td>-</td><td>-</td><td>395 B</td>
+</tr><tr><td>NativeStatic</td><td>RyuJitX64</td><td>True</td><td>False</td><td>Default</td><td>Default</td><td>Default</td><td>17.60 ms</td><td>0.121 ms</td><td>0.095 ms</td><td>17.63 ms</td><td>-</td><td>-</td><td>-</td><td>3 B</td>
+</tr><tr><td>NativeArray</td><td>RyuJitX64</td><td>True</td><td>False</td><td>Default</td><td>Default</td><td>Default</td><td>17.93 ms</td><td>0.102 ms</td><td>0.095 ms</td><td>17.93 ms</td><td>-</td><td>-</td><td>-</td><td>18 B</td>
+</tr><tr><td>DeterministicArray</td><td>Server</td><td>False</td><td>True</td><td>15</td><td>2</td><td>10</td><td>29.65 ms</td><td>0.048 ms</td><td>0.070 ms</td><td>29.63 ms</td><td>-</td><td>-</td><td>-</td><td>394 B</td>
+</tr><tr><td>NativeArray</td><td>Server</td><td>False</td><td>True</td><td>15</td><td>2</td><td>10</td><td>31.81 ms</td><td>0.268 ms</td><td>0.384 ms</td><td>31.74 ms</td><td>-</td><td>-</td><td>-</td><td>162 B</td>
+</tr><tr><td>MD5Static</td><td>ServerForce</td><td>True</td><td>True</td><td>15</td><td>2</td><td>10</td><td>127.51 ms</td><td>0.516 ms</td><td>0.773 ms</td><td>127.51 ms</td><td>500.0000</td><td>-</td><td>-</td><td>117602188 B</td>
+</tr><tr><td>MD5Static</td><td>RyuJitX64</td><td>True</td><td>False</td><td>Default</td><td>Default</td><td>Default</td><td>129.41 ms</td><td>2.507 ms</td><td>2.345 ms</td><td>129.13 ms</td><td>14000.0000</td><td>-</td><td>-</td><td>117600310 B</td>
+</tr><tr><td>MD5Array</td><td>ServerForce</td><td>True</td><td>True</td><td>15</td><td>2</td><td>10</td><td>134.52 ms</td><td>0.332 ms</td><td>0.486 ms</td><td>134.40 ms</td><td>500.0000</td><td>-</td><td>-</td><td>117600232 B</td>
+</tr><tr><td>MD5Static</td><td>Server</td><td>False</td><td>True</td><td>15</td><td>2</td><td>10</td><td>134.61 ms</td><td>0.545 ms</td><td>0.798 ms</td><td>134.54 ms</td><td>500.0000</td><td>-</td><td>-</td><td>117602210 B</td>
+</tr><tr><td>MD5Array</td><td>Server</td><td>False</td><td>True</td><td>15</td><td>2</td><td>10</td><td>141.42 ms</td><td>0.289 ms</td><td>0.433 ms</td><td>141.48 ms</td><td>500.0000</td><td>-</td><td>-</td><td>117602210 B</td>
+</tr><tr><td>MD5Array</td><td>RyuJitX64</td><td>True</td><td>False</td><td>Default</td><td>Default</td><td>Default</td><td>141.99 ms</td><td>1.206 ms</td><td>1.128 ms</td><td>141.91 ms</td><td>14000.0000</td><td>-</td><td>-</td><td>117600000 B</td>
+</tr></tbody></table>
+</body>
+</html>
